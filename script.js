@@ -100,6 +100,18 @@ const observer = new IntersectionObserver((entries) => {
 
 // Aplicar observador a elementos animables
 document.addEventListener('DOMContentLoaded', () => {
+    // Esperar e inicializar EmailJS cuando esté disponible
+    const initEmailJS = () => {
+        if (window.emailjs) {
+            emailjs.init('AqHJkMBV9ASulGqd0');
+            console.log('EmailJS: inicializado correctamente');
+        } else {
+            console.log('EmailJS: esperando SDK...');
+            setTimeout(initEmailJS, 100);
+        }
+    };
+    initEmailJS();
+
     // Iniciar animación de typing
     setTimeout(typeText, 1000);
 
@@ -142,10 +154,9 @@ if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const formData = new FormData(contactForm);
-        const name = formData.get('name') || contactForm.querySelector('input[type="text"]').value;
-        const email = formData.get('email') || contactForm.querySelector('input[type="email"]').value;
-        const message = formData.get('message') || contactForm.querySelector('textarea').value;
+        const name = document.getElementById('name') ? document.getElementById('name').value.trim() : (contactForm.querySelector('input[type="text"]') ? contactForm.querySelector('input[type="text"]').value.trim() : '');
+        const email = document.getElementById('email') ? document.getElementById('email').value.trim() : (contactForm.querySelector('input[type="email"]') ? contactForm.querySelector('input[type="email"]').value.trim() : '');
+        const message = document.getElementById('message') ? document.getElementById('message').value.trim() : (contactForm.querySelector('textarea') ? contactForm.querySelector('textarea').value.trim() : '');
 
         // Validación básica
         if (!name || !email || !message) {
@@ -158,9 +169,33 @@ if (contactForm) {
             return;
         }
 
-        // Simular envío (en un caso real, aquí iría una petición fetch)
-        showNotification('¡Mensaje enviado! Te contactaré pronto.', 'success');
-        contactForm.reset();
+        const payload = {
+            name: name,
+            from_name: name,
+            email: email,
+            user_email: email,
+            reply_to: email,
+            message: message,
+            email_to: 'ingridgurri@gmail.com',
+            subject: `Nuevo mensaje de ${name}`
+        };
+
+        if (window.emailjs && typeof emailjs.send === 'function') {
+            console.log('EmailJS: enviando payload ->', payload);
+            emailjs.send('service_aelyryr', 'template_99ug6bb', payload)
+            .then((response) => {
+                console.log('EmailJS: respuesta satisfactoria ->', response);
+                showNotification('¡Mensaje enviado! Te contactaré pronto.', 'success');
+                contactForm.reset();
+            }).catch((error) => {
+                console.error('EmailJS: error al enviar ->', error);
+                const errMsg = (error && error.text) ? error.text : 'Error al enviar. Revisa la consola.';
+                showNotification(errMsg, 'error');
+            });
+        } else {
+            showNotification('¡Mensaje enviado! (sin servidor configurado)', 'success');
+            contactForm.reset();
+        }
     });
 }
 
