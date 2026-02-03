@@ -32,10 +32,10 @@ window.addEventListener('scroll', () => {
 
 // Animación de typing para el subtítulo
 const typingTexts = [
-    'Desarrollador Full Stack',
-    'Diseñador UI/UX',
-    'Creador de Experiencias Digitales',
-    'Apasionado por la Tecnología'
+    'Programadora Java y Python',
+    'Trabajadora y comprometida',
+    'Creadora de Experiencias Digitales',
+    'Apasionada por la Tecnología'
 ];
 
 let currentTextIndex = 0;
