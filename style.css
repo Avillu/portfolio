@@ -31,8 +31,10 @@ body {
 
 /* Animaciones globales */
 @keyframes float {
-    0%, 100% { transform: translateY(50px) rotate(0deg); }
-    50% { transform: translateY(-30px) rotate(360deg); }
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-30px) rotate(8deg); }
+    50% { transform: translateY(-60px) rotate(-8deg); }
+    75% { transform: translateY(-30px) rotate(8deg); }
 }
 
 @keyframes gradientShift {
@@ -51,7 +53,7 @@ body {
     50% { opacity: 0; }
 }
 
-/* Fondo animado */
+/* Fondo animado con red neural */
 .background-animation {
     position: fixed;
     top: 0;
@@ -60,41 +62,56 @@ body {
     height: 100%;
     z-index: -1;
     overflow: hidden;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 0, 170, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(10, 0, 31, 0.05) 0%, transparent 50%);
 }
 
 .gradient-circle {
     position: absolute;
     border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.7;
-    animation: float 15s ease-in-out infinite;
+    filter: blur(80px);
+    opacity: 0.3;
+    animation: float 20s ease-in-out infinite;
 }
 
 .circle-1 {
-    width: 300px;
-    height: 300px;
-    background: var(--primary-color);
-    top: 10%;
-    left: 10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--primary-color), transparent);
+    top: 5%;
+    left: 5%;
     animation-delay: 0s;
 }
 
 .circle-2 {
-    width: 400px;
-    height: 400px;
-    background: var(--secondary-color);
-    top: 60%;
-    right: 10%;
-    animation-delay: -5s;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--secondary-color), transparent);
+    top: 50%;
+    right: 5%;
+    animation-delay: -7s;
 }
 
 .circle-3 {
-    width: 250px;
-    height: 250px;
-    background: var(--accent-color);
-    bottom: 10%;
-    left: 60%;
-    animation-delay: -10s;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, var(--accent-color), transparent);
+    bottom: 5%;
+    left: 50%;
+    animation-delay: -14s;
+}
+
+/* Puntos de red neural */
+.background-animation::before {
+    content: none;
+    display: none;
+}
+
+@keyframes moveGrid {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
 }
 
 /* Navigation */
@@ -330,6 +347,7 @@ body {
     font-weight: 600;
     box-shadow: var(--shadow);
     animation: float 6s ease-in-out infinite;
+    z-index: 10;
 }
 
 .card-1 {
@@ -361,6 +379,7 @@ body {
     border-radius: 50%;
     animation: float 8s ease-in-out infinite;
     box-shadow: var(--shadow-lg);
+    z-index: 1;
 }
 
 .orb-inner {
@@ -381,6 +400,10 @@ body {
     padding: 0 2rem;
 }
 
+.about .container {
+    position: relative;
+}
+
 section {
     padding: 6rem 0;
 }
@@ -394,8 +417,94 @@ section {
 
 /* About Section */
 .about {
-    background: var(--bg-secondary);
+    background: linear-gradient(135deg, #050014 0%, #0a0f1a 50%, #0b0022 100%);
     position: relative;
+    overflow: hidden;
+}
+
+/* Estrellas centelleantes */
+.about::before {
+    content: none;
+    display: none;
+}
+
+/* Planetas */
+.about::after {
+    content: none;
+    display: none;
+}
+
+.about-hexes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.about-hex {
+    position: absolute;
+    width: 70px;
+    height: 60px;
+    background: transparent;
+    border: 2px solid rgba(0, 217, 255, 0.75);
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    filter: drop-shadow(0 0 14px rgba(0, 217, 255, 0.5));
+    animation: aboutHexFloatA 6s ease-in-out infinite;
+}
+
+.about-hexes .about-hex:nth-child(1) { top: 8%; left: 10%; animation-duration: 6s; }
+.about-hexes .about-hex:nth-child(2) { top: 16%; left: 32%; width: 58px; height: 50px; animation-duration: 7s; }
+.about-hexes .about-hex:nth-child(3) { top: 12%; left: 58%; width: 78px; height: 68px; animation-duration: 5.8s; }
+.about-hexes .about-hex:nth-child(4) { top: 22%; left: 78%; width: 60px; height: 52px; animation-duration: 7.2s; }
+.about-hexes .about-hex:nth-child(5) { top: 38%; left: 12%; width: 74px; height: 64px; animation-duration: 6.4s; }
+.about-hexes .about-hex:nth-child(6) { top: 46%; left: 36%; width: 64px; height: 56px; animation-duration: 5.6s; }
+.about-hexes .about-hex:nth-child(7) { top: 52%; left: 60%; width: 82px; height: 70px; animation-duration: 7.4s; }
+.about-hexes .about-hex:nth-child(8) { top: 40%; left: 82%; width: 56px; height: 48px; animation-duration: 6.2s; }
+.about-hexes .about-hex:nth-child(9) { top: 66%; left: 18%; width: 68px; height: 58px; animation-duration: 7.1s; }
+.about-hexes .about-hex:nth-child(10) { top: 70%; left: 44%; width: 76px; height: 66px; animation-duration: 6.1s; }
+.about-hexes .about-hex:nth-child(11) { top: 74%; left: 68%; width: 62px; height: 54px; animation-duration: 7.6s; }
+.about-hexes .about-hex:nth-child(12) { top: 62%; left: 84%; width: 58px; height: 50px; animation-duration: 6.6s; }
+
+.about-hexes .about-hex:nth-child(odd) {
+    border-color: rgba(255, 0, 170, 0.7);
+    filter: drop-shadow(0 0 14px rgba(255, 0, 170, 0.5));
+    animation-name: aboutHexFloatB;
+}
+
+/* Campo de estrellas pequeñas */
+.about .container::before {
+    content: none;
+    display: none;
+}
+
+/* Estrellas fugaces */
+.about .container::after {
+    content: none;
+    display: none;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+@keyframes twinkleSlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes shootingStar {
+    0% {
+        transform: translate(0, 0) rotate(-45deg);
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-300px, 300px) rotate(-45deg);
+        opacity: 0;
+    }
 }
 
 .about-content {
@@ -403,6 +512,8 @@ section {
     grid-template-columns: 2fr 1fr;
     gap: 4rem;
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .about-badge {
@@ -525,7 +636,7 @@ section {
 }
 
 .project-image {
-    height: 450px;
+    height: 470px;
     background: var(--gradient);
     position: relative;
     display: flex;
@@ -597,12 +708,77 @@ section {
 /* Contact Section */
 .contact {
     background: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact .container {
+    position: relative;
+    z-index: 1;
+}
+
+.contact::before {
+    content: '';
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    left: 6%;
+    top: 18%;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at center, transparent 0 25%, rgba(255, 0, 170, 0.28) 26%, transparent 27%),
+        radial-gradient(circle at center, transparent 0 50%, rgba(124, 58, 237, 0.24) 51%, transparent 52%),
+        radial-gradient(circle at center, transparent 0 75%, rgba(0, 217, 255, 0.18) 76%, transparent 77%);
+    box-shadow:
+        inset 0 0 18px rgba(255, 0, 170, 0.25),
+        0 0 18px rgba(124, 58, 237, 0.22);
+    opacity: 0.85;
+    animation: radarPulse 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.contact::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    right: 8%;
+    bottom: 16%;
+    border-radius: 50%;
+    background:
+        conic-gradient(from 0deg, rgba(255, 0, 170, 0.45), rgba(124, 58, 237, 0) 70deg, transparent 360deg),
+        radial-gradient(circle at center, transparent 0 60%, rgba(124, 58, 237, 0.22) 61%, transparent 62%),
+        radial-gradient(circle at center, transparent 0 30%, rgba(0, 217, 255, 0.18) 31%, transparent 32%);
+    filter: drop-shadow(0 0 16px rgba(255, 0, 170, 0.35));
+    animation: radarSweep 4s linear infinite;
+    pointer-events: none;
+    z-index: 0;
 }
 
 .contact-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.contact-content::before {
+    content: '';
+    position: absolute;
+    inset: -40px;
+    background:
+        linear-gradient(90deg, rgba(124, 58, 237, 0.18) 1px, transparent 1px) 0 0 / 120px 120px,
+        linear-gradient(180deg, rgba(255, 0, 170, 0.16) 1px, transparent 1px) 0 0 / 120px 120px,
+        radial-gradient(circle at 15% 20%, rgba(255, 0, 170, 0.25) 0 4px, transparent 5px),
+        radial-gradient(circle at 80% 35%, rgba(124, 58, 237, 0.25) 0 4px, transparent 5px),
+        radial-gradient(circle at 35% 70%, rgba(0, 217, 255, 0.22) 0 4px, transparent 5px),
+        radial-gradient(circle at 70% 85%, rgba(255, 0, 170, 0.22) 0 4px, transparent 5px);
+    opacity: 0.5;
+    animation: circuitDrift 12s linear infinite;
+    pointer-events: none;
+    z-index: 0;
 }
 
 .contact-info {
@@ -773,4 +949,49 @@ section {
     .section-title {
         font-size: 2.5rem;
     }
+}
+
+@keyframes aboutPanelsA {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.85; }
+    50% { transform: translate(10px, -28px) rotate(1.8deg) scale(1.05); opacity: 1; }
+}
+
+@keyframes aboutPanelsB {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.7; }
+    50% { transform: translate(-28px, 16px) rotate(-1.8deg) scale(1.06); opacity: 0.95; }
+}
+
+@keyframes aboutSquares {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.75; }
+    50% { transform: translate(18px, -18px) rotate(6deg); opacity: 1; }
+}
+
+@keyframes aboutHexFloatA {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
+    50% { transform: translate(18px, -22px) rotate(4deg); opacity: 1; }
+}
+
+@keyframes aboutHexFloatB {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.75; }
+    50% { transform: translate(-20px, 18px) rotate(-4deg); opacity: 1; }
+}
+
+@keyframes radarPulse {
+    0%, 100% { transform: scale(1); opacity: 0.75; }
+    50% { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes radarSweep {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes circuitDrift {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(40px, 20px); }
+}
+
+@keyframes aboutScan {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
 }
